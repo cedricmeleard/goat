@@ -137,9 +137,9 @@ public class GoldenMasterTests
 
             public Character Build() => new()
             {
-                N = _name,
-                R = _race,
-                W = _weapon?.Build()
+                Name = _name,
+                Race = _race,
+                Weapon = _weapon?.Build()
             };
         }
 
