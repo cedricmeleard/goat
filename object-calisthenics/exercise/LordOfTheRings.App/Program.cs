@@ -63,8 +63,8 @@ public static class Program
                 R = "Human",
                 W = new Weapon
                 {
-                    Name = "Anduril",
-                    Damage = 100
+                    Name = "Sword",
+                    Damage = 90
                 }
             });
             fellowship.AddMember(new Character
@@ -137,8 +137,26 @@ public static class Program
         };
 
         fellowship.MoveMembersToRegion(group1, "Rivendell");
+        fellowship.UpdateCharacterWeapon("Frodo", "Dard", 25);
+
+        fellowship.RemoveMember("Boromir");
+
+        try {
+            fellowship.RemoveMember("Saroumane"); //this should fail for "Saroumane"    
+        }
+        catch (Exception ex) {
+            Console.WriteLine(ex.Message);
+        }
+
+
         fellowship.MoveMembersToRegion(group2, "Moria");
         fellowship.MoveMembersToRegion(group3, "Lothlorien");
+
+        fellowship.PrintMembersInRegion("Rivendell");
+        fellowship.PrintMembersInRegion("Moria");
+        fellowship.PrintMembersInRegion("Lothlorien");
+        fellowship.PrintMembersInRegion("Mordor");
+        fellowship.PrintMembersInRegion("Shire");
 
         try {
             var group4 = new List<string>
@@ -152,6 +170,9 @@ public static class Program
         catch (Exception ex) {
             Console.WriteLine(ex.Message);
         }
+
+        // finaly Aragorn get reforged elendil's blade
+        fellowship.UpdateCharacterWeapon("Aragorn", "Anduril", 150);
 
         fellowship.PrintMembersInRegion("Rivendell");
         fellowship.PrintMembersInRegion("Moria");
