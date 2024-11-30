@@ -14,55 +14,55 @@ public static class Program
         var fellowship = new FellowshipOfTheRingService();
 
         try {
-            fellowship.Fellowship.AddMember(new Character(
+            fellowship.Fellowship.AddMember(Character.Create(
                 Name.Parse("Frodo"),
                 Race.Hobbit,
                 new Weapon(WeaponName.Parse("Sting"), Damage.Parse(30))
             ));
 
-            fellowship.Fellowship.AddMember(new Character(
+            fellowship.Fellowship.AddMember(Character.Create(
                 Name.Parse("Sam"),
                 Race.Hobbit,
                 new Weapon(WeaponName.Parse("Dagger"), Damage.Parse(10))
             ));
 
 
-            fellowship.Fellowship.AddMember(new Character(
+            fellowship.Fellowship.AddMember(Character.Create(
                 Name.Parse("Merry"),
                 Race.Hobbit,
                 new Weapon(WeaponName.Parse("Short Sword"), Damage.Parse(24))
             ));
 
-            fellowship.Fellowship.AddMember(new Character(
+            fellowship.Fellowship.AddMember(Character.Create(
                 Name.Parse("Pippin"),
                 Race.Hobbit,
                 new Weapon(WeaponName.Parse("Bow"), Damage.Parse(8))
             ));
 
-            fellowship.Fellowship.AddMember(new Character(
+            fellowship.Fellowship.AddMember(Character.Create(
                 Name.Parse("Aragorn"),
                 Race.Human,
                 new Weapon(WeaponName.Parse("Sword"), Damage.Parse(90))
             ));
-            fellowship.Fellowship.AddMember(new Character(
+            fellowship.Fellowship.AddMember(Character.Create(
                 Name.Parse("Boromir"),
                 Race.Human,
                 new Weapon(WeaponName.Parse("Sword"), Damage.Parse(90))
             ));
 
-            fellowship.Fellowship.AddMember(new Character(
+            fellowship.Fellowship.AddMember(Character.Create(
                 Name.Parse("Legolas"),
                 Race.Elf,
                 new Weapon(WeaponName.Parse("Bow"), Damage.Parse(100))
             ));
 
-            fellowship.Fellowship.AddMember(new Character(
+            fellowship.Fellowship.AddMember(Character.Create(
                 Name.Parse("Gimli"),
                 Race.Dwarf,
                 new Weapon(WeaponName.Parse("Axe"), Damage.Parse(100))
             ));
 
-            fellowship.Fellowship.AddMember(new Character(
+            fellowship.Fellowship.AddMember(Character.Create(
                 Name.Parse("Gandalf the 🐐"),
                 Race.Wizard,
                 new Weapon(WeaponName.Parse("Staff"), Damage.Parse(200))

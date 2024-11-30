@@ -126,7 +126,7 @@ public class GoldenMasterTests
                 _weapon = weapon;
             }
 
-            public Character Build() => new(Name.Parse(_name), _race, _weapon?.Build());
+            public Character Build() => Character.Create(Name.Parse(_name), _race, _weapon?.Build());
         }
 
         public class WeaponBuilder

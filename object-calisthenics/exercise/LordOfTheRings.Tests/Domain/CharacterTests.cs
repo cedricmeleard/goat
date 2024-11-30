@@ -9,7 +9,7 @@ public class CharacterTests
     public void CharacterCantReturnFromMordor()
     {
         // Arrange
-        var frodo = new Character(Name.Parse("Frodo Baggins"), Race.Hobbit, new Weapon(WeaponName.Parse("Dard"), Damage.Parse(100)));
+        var frodo = Character.Create(Name.Parse("Frodo Baggins"), Race.Hobbit, new Weapon(WeaponName.Parse("Dard"), Damage.Parse(100)));
         frodo.ChangeRegion(Region.Mordor);
 
         // Act
