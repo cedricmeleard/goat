@@ -1,4 +1,6 @@
-﻿namespace LordOfTheRings.App;
+﻿using LordOfTheRings.Domain;
+
+namespace LordOfTheRings.App;
 
 public static class Program
 {
@@ -12,104 +14,59 @@ public static class Program
         var fellowship = new FellowshipOfTheRingService();
 
         try {
-            fellowship.AddMember(new Character
-            {
-                Name = "Frodo",
-                Race = "Hobbit",
-                Weapon = new Weapon
-                {
-                    Name = "Sting",
-                    Damage = 30
-                }
-            });
+            fellowship.AddMember(new Character(
+                Name.Parse("Frodo"),
+                Race.Hobbit,
+                new Weapon(WeaponName.Parse("Sting"), Damage.Parse(30))
+            ));
 
-            fellowship.AddMember(new Character
-            {
-                Name = "Sam",
-                Race = "Hobbit",
-                Weapon = new Weapon
-                {
-                    Name = "Dagger",
-                    Damage = 10
-                }
-            });
+            fellowship.AddMember(new Character(
+                Name.Parse("Sam"),
+                Race.Hobbit,
+                new Weapon(WeaponName.Parse("Dagger"), Damage.Parse(10))
+            ));
 
 
-            fellowship.AddMember(new Character
-            {
-                Name = "Merry",
-                Race = "Hobbit",
-                Weapon = new Weapon
-                {
-                    Name = "Short Sword",
-                    Damage = 24
-                }
-            });
+            fellowship.AddMember(new Character(
+                Name.Parse("Merry"),
+                Race.Hobbit,
+                new Weapon(WeaponName.Parse("Short Sword"), Damage.Parse(24))
+            ));
 
-            fellowship.AddMember(new Character
-            {
-                Name = "Pippin",
-                Race = "Hobbit",
-                Weapon = new Weapon
-                {
-                    Name = "Bow",
-                    Damage = 8
-                }
-            });
+            fellowship.AddMember(new Character(
+                Name.Parse("Pippin"),
+                Race.Hobbit,
+                new Weapon(WeaponName.Parse("Bow"), Damage.Parse(8))
+            ));
 
-            fellowship.AddMember(new Character
-            {
-                Name = "Aragorn",
-                Race = "Human",
-                Weapon = new Weapon
-                {
-                    Name = "Sword",
-                    Damage = 90
-                }
-            });
-            fellowship.AddMember(new Character
-            {
-                Name = "Boromir",
-                Race = "Human",
-                Weapon = new Weapon
-                {
-                    Name = "Sword",
-                    Damage = 90
-                }
-            });
+            fellowship.AddMember(new Character(
+                Name.Parse("Aragorn"),
+                Race.Human,
+                new Weapon(WeaponName.Parse("Sword"), Damage.Parse(90))
+            ));
+            fellowship.AddMember(new Character(
+                Name.Parse("Boromir"),
+                Race.Human,
+                new Weapon(WeaponName.Parse("Sword"), Damage.Parse(90))
+            ));
 
-            fellowship.AddMember(new Character
-            {
-                Name = "Legolas",
-                Race = "Elf",
-                Weapon = new Weapon
-                {
-                    Name = "Bow",
-                    Damage = 100
-                }
-            });
+            fellowship.AddMember(new Character(
+                Name.Parse("Legolas"),
+                Race.Elf,
+                new Weapon(WeaponName.Parse("Bow"), Damage.Parse(100))
+            ));
 
-            fellowship.AddMember(new Character
-            {
-                Name = "Gimli",
-                Race = "Dwarf",
-                Weapon = new Weapon
-                {
-                    Name = "Axe",
-                    Damage = 100
-                }
-            });
+            fellowship.AddMember(new Character(
+                Name.Parse("Gimli"),
+                Race.Dwarf,
+                new Weapon(WeaponName.Parse("Axe"), Damage.Parse(100))
+            ));
 
-            fellowship.AddMember(new Character
-            {
-                Name = "Gandalf the 🐐",
-                Race = "Wizard",
-                Weapon = new Weapon
-                {
-                    Name = "Staff",
-                    Damage = 200
-                }
-            });
+            fellowship.AddMember(new Character(
+                Name.Parse("Gandalf the 🐐"),
+                Race.Wizard,
+                new Weapon(WeaponName.Parse("Staff"), Damage.Parse(200))
+            ));
 
             Console.WriteLine(fellowship.ToString());
         }
@@ -117,72 +74,72 @@ public static class Program
             Console.WriteLine(ex.Message);
         }
 
-        var group1 = new List<string>
+        var group1 = new List<Name>
         {
-            "Frodo",
-            "Sam"
+            Name.Parse("Frodo"),
+            Name.Parse("Sam")
         };
-        var group2 = new List<string>
+        var group2 = new List<Name>
         {
-            "Merry",
-            "Pippin",
-            "Aragorn",
-            "Boromir"
+            Name.Parse("Merry"),
+            Name.Parse("Pippin"),
+            Name.Parse("Aragorn"),
+            Name.Parse("Boromir")
         };
-        var group3 = new List<string>
+        var group3 = new List<Name>
         {
-            "Legolas",
-            "Gimli",
-            "Gandalf the 🐐"
+            Name.Parse("Legolas"),
+            Name.Parse("Gimli"),
+            Name.Parse("Gandalf the 🐐")
         };
 
-        fellowship.MoveMembersToRegion(group1, "Rivendell");
-        fellowship.UpdateCharacterWeapon("Frodo", "Dard", 25);
+        fellowship.MoveMembersToRegion(group1, Region.Rivendell);
+        fellowship.UpdateCharacterWeapon(Name.Parse("Frodo"), WeaponName.Parse("Dard"), Damage.Parse(25));
 
-        fellowship.RemoveMember("Boromir");
+        fellowship.RemoveMember(Name.Parse("Boromir"));
 
         try {
-            fellowship.RemoveMember("Saroumane"); //this should fail for "Saroumane"    
+            fellowship.RemoveMember(Name.Parse("Saroumane")); //this should fail for "Saroumane"    
         }
         catch (Exception ex) {
             Console.WriteLine(ex.Message);
         }
 
 
-        fellowship.MoveMembersToRegion(group2, "Moria");
-        fellowship.MoveMembersToRegion(group3, "Lothlorien");
+        fellowship.MoveMembersToRegion(group2, Region.Moria);
+        fellowship.MoveMembersToRegion(group3, Region.Lothlorien);
 
-        fellowship.PrintMembersInRegion("Rivendell");
-        fellowship.PrintMembersInRegion("Moria");
-        fellowship.PrintMembersInRegion("Lothlorien");
-        fellowship.PrintMembersInRegion("Mordor");
-        fellowship.PrintMembersInRegion("Shire");
+        fellowship.PrintMembersInRegion(Region.Rivendell);
+        fellowship.PrintMembersInRegion(Region.Moria);
+        fellowship.PrintMembersInRegion(Region.Lothlorien);
+        fellowship.PrintMembersInRegion(Region.Mordor);
+        fellowship.PrintMembersInRegion(Region.Shire);
 
         try {
-            var group4 = new List<string>
+            var group4 = new List<Name>
             {
-                "Frodo",
-                "Sam"
+                Name.Parse("Frodo"),
+                Name.Parse("Sam")
             };
-            fellowship.MoveMembersToRegion(group4, "Mordor");
-            fellowship.MoveMembersToRegion(group4, "Shire"); // This should fail for "Frodo"
+            fellowship.MoveMembersToRegion(group4, Region.Mordor);
+            fellowship.MoveMembersToRegion(group4, Region.Shire); // This should fail for "Frodo"
         }
         catch (Exception ex) {
             Console.WriteLine(ex.Message);
         }
 
         // finaly Aragorn get reforged elendil's blade
-        fellowship.UpdateCharacterWeapon("Aragorn", "Anduril", 150);
+        fellowship.UpdateCharacterWeapon(Name.Parse("Aragorn"), WeaponName.Parse("Anduril"), Damage.Parse(150));
 
-        fellowship.PrintMembersInRegion("Rivendell");
-        fellowship.PrintMembersInRegion("Moria");
-        fellowship.PrintMembersInRegion("Lothlorien");
-        fellowship.PrintMembersInRegion("Mordor");
-        fellowship.PrintMembersInRegion("Shire");
+        fellowship.PrintMembersInRegion(Region.Rivendell);
+        fellowship.PrintMembersInRegion(Region.Moria);
+        fellowship.PrintMembersInRegion(Region.Lothlorien);
+        fellowship.PrintMembersInRegion(Region.Mordor);
+        fellowship.PrintMembersInRegion(Region.Shire);
 
         try {
-            fellowship.RemoveMember("Frodo");
-            fellowship.RemoveMember("Sam"); // This should throw an exception
+            fellowship.RemoveMember(Name.Parse("Frodo"));
+            fellowship.RemoveMember(Name.Parse("Sam")); // This should throw an exception
         }
         catch (Exception ex) {
             Console.WriteLine(ex.Message);

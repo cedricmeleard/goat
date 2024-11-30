@@ -1,6 +1,7 @@
 using System.Collections;
 using FluentAssertions;
 using LordOfTheRings.App;
+using LordOfTheRings.Domain;
 
 namespace LordOfTheRings.Tests;
 
@@ -42,9 +43,9 @@ public class GoldenMasterTests
         public void Should_Fail_When_Character_Added_Twice()
         {
             var sut = new FellowshipOfTheRingService();
-            sut.AddMember(new CharacterBuilder("Gimli", "Dwarf", new WeaponBuilder("Axe", 15)).Build());
+            sut.AddMember(new CharacterBuilder("Gimli", Race.Dwarf, new WeaponBuilder("Axe", 15)).Build());
             // Act
-            var action = () => sut.AddMember(new CharacterBuilder("Gimli", "Dwarf", new WeaponBuilder("Axe", 15)).Build());
+            var action = () => sut.AddMember(new CharacterBuilder("Gimli", Race.Dwarf, new WeaponBuilder("Axe", 15)).Build());
             // Assert: Utiliser Verify pour vérifier la sortie
             action
                 .Should()
@@ -75,47 +76,37 @@ public class GoldenMasterTests
                 // Character with null or whitespace name
                 yield return new object[]
                 {
-                    new CharacterBuilder(null, "Elf", new WeaponBuilder("Sword", 10)), typeof(ArgumentException), "Character must have a name."
+                    new CharacterBuilder(null, Race.Elf, new WeaponBuilder("Sword", 10)), typeof(ArgumentException), "Character must have a name."
                 };
                 yield return new object[]
                 {
-                    new CharacterBuilder("", "Elf", new WeaponBuilder("Sword", 10)), typeof(ArgumentException), "Character must have a name."
-                };
-
-                // Character with null or whitespace race
-                yield return new object[]
-                {
-                    new CharacterBuilder("Legolas", null, new WeaponBuilder("Sword", 10)), typeof(ArgumentException), "Character must have a race."
-                };
-                yield return new object[]
-                {
-                    new CharacterBuilder("Legolas", "", new WeaponBuilder("Sword", 10)), typeof(ArgumentException), "Character must have a race."
+                    new CharacterBuilder("", Race.Elf, new WeaponBuilder("Sword", 10)), typeof(ArgumentException), "Character must have a name."
                 };
 
                 // Character with null weapon
                 yield return new object[]
                 {
-                    new CharacterBuilder("Legolas", "Elf", null), typeof(ArgumentException), "Character must have a weapon."
+                    new CharacterBuilder("Legolas", Race.Elf, null), typeof(ArgumentException), "Character must have a weapon."
                 };
 
                 // Weapon with null or whitespace name
                 yield return new object[]
                 {
-                    new CharacterBuilder("Legolas", "Elf", new WeaponBuilder(null, 10)), typeof(ArgumentException), "A weapon must have a name."
+                    new CharacterBuilder("Legolas", Race.Elf, new WeaponBuilder(null, 10)), typeof(ArgumentException), "A weapon must have a name."
                 };
                 yield return new object[]
                 {
-                    new CharacterBuilder("Legolas", "Elf", new WeaponBuilder("", 10)), typeof(ArgumentException), "A weapon must have a name."
+                    new CharacterBuilder("Legolas", Race.Elf, new WeaponBuilder("", 10)), typeof(ArgumentException), "A weapon must have a name."
                 };
 
                 // Weapon with non-positive damage
                 yield return new object[]
                 {
-                    new CharacterBuilder("Legolas", "Elf", new WeaponBuilder("Sword", 0)), typeof(ArgumentException), "A weapon must have a damage level."
+                    new CharacterBuilder("Legolas", Race.Elf, new WeaponBuilder("Sword", 0)), typeof(ArgumentException), "A weapon must have a damage level."
                 };
                 yield return new object[]
                 {
-                    new CharacterBuilder("Legolas", "Elf", new WeaponBuilder("Sword", -5)), typeof(ArgumentException), "A weapon must have a damage level."
+                    new CharacterBuilder("Legolas", Race.Elf, new WeaponBuilder("Sword", -5)), typeof(ArgumentException), "A weapon must have a damage level."
                 };
             }
 
@@ -125,22 +116,17 @@ public class GoldenMasterTests
         public class CharacterBuilder
         {
             private readonly string _name;
-            private readonly string _race;
+            private readonly Race _race;
             private readonly WeaponBuilder _weapon;
 
-            public CharacterBuilder(string name, string race, WeaponBuilder weapon)
+            public CharacterBuilder(string name, Race race, WeaponBuilder weapon)
             {
                 _name = name;
                 _race = race;
                 _weapon = weapon;
             }
 
-            public Character Build() => new()
-            {
-                Name = _name,
-                Race = _race,
-                Weapon = _weapon?.Build()
-            };
+            public Character Build() => new(Name.Parse(_name), _race, _weapon?.Build());
         }
 
         public class WeaponBuilder
@@ -153,11 +139,7 @@ public class GoldenMasterTests
                 _name = name;
                 _damage = damage;
             }
-            public Weapon? Build() => new()
-            {
-                Name = _name,
-                Damage = _damage
-            };
+            public Weapon? Build() => new(WeaponName.Parse(_name), Damage.Parse(_damage));
         }
     }
 }
