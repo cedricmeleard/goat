@@ -30,7 +30,7 @@ public class GoldenMasterTests
         {
             var sut = new FellowshipOfTheRingService();
             // Act
-            var action = () => sut.AddMember(character.Build());
+            var action = () => sut.Fellowship.AddMember(character.Build());
             // Assert: Utiliser Verify pour vérifier la sortie
             action
                 .Should()
@@ -43,9 +43,9 @@ public class GoldenMasterTests
         public void Should_Fail_When_Character_Added_Twice()
         {
             var sut = new FellowshipOfTheRingService();
-            sut.AddMember(new CharacterBuilder("Gimli", Race.Dwarf, new WeaponBuilder("Axe", 15)).Build());
+            sut.Fellowship.AddMember(new CharacterBuilder("Gimli", Race.Dwarf, new WeaponBuilder("Axe", 15)).Build());
             // Act
-            var action = () => sut.AddMember(new CharacterBuilder("Gimli", Race.Dwarf, new WeaponBuilder("Axe", 15)).Build());
+            var action = () => sut.Fellowship.AddMember(new CharacterBuilder("Gimli", Race.Dwarf, new WeaponBuilder("Axe", 15)).Build());
             // Assert: Utiliser Verify pour vérifier la sortie
             action
                 .Should()
@@ -58,7 +58,7 @@ public class GoldenMasterTests
         {
             var sut = new FellowshipOfTheRingService();
             // Act
-            var action = () => sut.AddMember(null);
+            var action = () => sut.Fellowship.AddMember(null);
             // Assert: Utiliser Verify pour vérifier la sortie
             action
                 .Should()
