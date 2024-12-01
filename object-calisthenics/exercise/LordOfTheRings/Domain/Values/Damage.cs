@@ -1,4 +1,4 @@
-namespace LordOfTheRings.Domain;
+namespace LordOfTheRings.Domain.Values;
 
 public sealed class Damage : IEquatable<Damage>
 {

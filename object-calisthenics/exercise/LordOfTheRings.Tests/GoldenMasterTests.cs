@@ -1,7 +1,8 @@
 using System.Collections;
 using FluentAssertions;
 using LordOfTheRings.App;
-using LordOfTheRings.Domain;
+using LordOfTheRings.Domain.Entities;
+using LordOfTheRings.Domain.Values;
 
 namespace LordOfTheRings.Tests;
 
@@ -113,33 +114,14 @@ public class GoldenMasterTests
             IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         }
 
-        public class CharacterBuilder
+        public class CharacterBuilder(string name, Race race, WeaponBuilder weapon)
         {
-            private readonly string _name;
-            private readonly Race _race;
-            private readonly WeaponBuilder _weapon;
-
-            public CharacterBuilder(string name, Race race, WeaponBuilder weapon)
-            {
-                _name = name;
-                _race = race;
-                _weapon = weapon;
-            }
-
-            public Character Build() => Character.Create(Name.Parse(_name), _race, _weapon?.Build());
+            public Character Build() => Character.Create(Name.Parse(name), race, weapon?.Build());
         }
 
-        public class WeaponBuilder
+        public class WeaponBuilder(string name, int damage)
         {
-            private readonly int _damage;
-            private readonly string _name;
-
-            public WeaponBuilder(string name, int damage)
-            {
-                _name = name;
-                _damage = damage;
-            }
-            public Weapon? Build() => new(WeaponName.Parse(_name), Damage.Parse(_damage));
+            public Weapon? Build() => new(WeaponName.Parse(name), Damage.Parse(damage));
         }
     }
 }

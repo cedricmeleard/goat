@@ -1,4 +1,4 @@
-namespace LordOfTheRings.Domain;
+namespace LordOfTheRings.Domain.Values;
 
 public enum Race
 {

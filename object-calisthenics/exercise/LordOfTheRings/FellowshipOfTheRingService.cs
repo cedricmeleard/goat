@@ -1,4 +1,6 @@
-using LordOfTheRings.Domain;
+using LordOfTheRings.Domain.Entities;
+using LordOfTheRings.Domain.Specifications;
+using LordOfTheRings.Domain.Values;
 
 namespace LordOfTheRings;
 
@@ -7,14 +9,9 @@ public class FellowshipOfTheRingService
     public Fellowship Fellowship { get; } = new();
 
     public void UpdateCharacterWeapon(Name name, WeaponName newWeapon, Damage damage)
-    {
-        var character = Fellowship.GetMember(name);
-        if (character == null) {
-            return;
-        }
-
-        character.Weapon = new Weapon(newWeapon, damage);
-    }
+        => Fellowship
+            .GetMember(name)?
+            .ChangeWeapon(new Weapon(newWeapon, damage));
 
     public void MoveMembersToRegion(List<Name> memberNames, Region region)
     {
@@ -26,38 +23,41 @@ public class FellowshipOfTheRingService
 
             character.ChangeRegion(region);
 
+            // let's see if that can be moved to domain events
             if (region != Region.Mordor) {
-                Console.WriteLine($"{character.Name} moved to {region}.");
+                Console.WriteLine($"{character.GetName()} moved to {region}.");
             } else {
-                Console.WriteLine($"{character.Name} moved to {region} 💀.");
+                Console.WriteLine($"{character.GetName()} moved to {region} 💀.");
             }
         }
     }
 
     public void PrintMembersInRegion(Region region)
     {
-        List<Character> charactersInRegion = new();
-        foreach (var character in Fellowship.GetAllMembers()) {
-            if (character.Region == region) {
-                charactersInRegion.Add(character);
-            }
+        var charactersInRegion = Fellowship
+            .GetAllMembers()
+            .Where(character => RegionSpecification
+                .ForRegion(region)
+                .IsSatisfiedBy(character))
+            .ToList();
+
+        if (charactersInRegion.Count == 0) {
+            Console.WriteLine($"No members in {region}");
+            return;
         }
 
-        if (charactersInRegion.Count > 0) {
-            Console.WriteLine($"Members in {region}:");
-            foreach (var character in charactersInRegion) {
-                Console.WriteLine($"{character.Name} ({character.Race}) with {character.Weapon.Name}");
-            }
-        } else if (charactersInRegion.Count == 0) {
-            Console.WriteLine($"No members in {region}");
+        Console.WriteLine($"Members in {region}:");
+        foreach (var character in charactersInRegion) {
+            Console.WriteLine($"{character.GetName()} ({character.GetRace()}) with {character.GetWeaponName()}");
         }
     }
 
     public override string ToString()
     {
         string result = "Fellowship of the Ring Members:\n";
+
         foreach (var member in Fellowship.GetAllMembers()) {
-            result += $"{member.Name} ({member.Race}) with {member.Weapon.Name} in {member.Region}" + "\n";
+            result += $"{member.GetName()} ({member.GetRace()}) with {member.GetWeaponName()} in {member.GetRegion()}" + "\n";
         }
 
         return result;

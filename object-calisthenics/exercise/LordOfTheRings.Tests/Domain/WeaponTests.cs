@@ -1,6 +1,7 @@
 using FsCheck;
 using FsCheck.Xunit;
-using LordOfTheRings.Domain;
+using LordOfTheRings.Domain.Entities;
+using LordOfTheRings.Domain.Values;
 
 namespace LordOfTheRings.Tests.Domain;
 

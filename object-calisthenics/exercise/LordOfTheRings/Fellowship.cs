@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
-using LordOfTheRings.Domain;
+using LordOfTheRings.Domain.Entities;
+using LordOfTheRings.Domain.Values;
 
 namespace LordOfTheRings;
 
@@ -33,6 +34,6 @@ public sealed class Fellowship
     public Character? GetMember(Name name) => FindMemberByName(name);
     public IReadOnlyCollection<Character> GetAllMembers() => new ReadOnlyCollection<Character>(_members);
 
-    private Character? FindMemberByName(Name name) => _members.Find(character => character.Name == name);
-    private bool IsInFellowship(Character character) => _members.Exists(m => m.Name == character.Name);
+    private Character? FindMemberByName(Name name) => _members.Find(character => character.GetName() == name);
+    private bool IsInFellowship(Character character) => _members.Exists(m => m.GetName() == character.GetName());
 }

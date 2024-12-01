@@ -1,5 +1,6 @@
 using FluentAssertions;
-using LordOfTheRings.Domain;
+using LordOfTheRings.Domain.Entities;
+using LordOfTheRings.Domain.Values;
 
 namespace LordOfTheRings.Tests.Domain;
 

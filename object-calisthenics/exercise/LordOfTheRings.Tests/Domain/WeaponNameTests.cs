@@ -1,7 +1,7 @@
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
-using LordOfTheRings.Domain;
+using LordOfTheRings.Domain.Values;
 
 namespace LordOfTheRings.Tests.Domain;
 
