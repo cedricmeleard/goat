@@ -1,3 +1,4 @@
+using System.Text;
 using LordOfTheRings.Domain.Entities;
 using LordOfTheRings.Domain.Specifications;
 using LordOfTheRings.Domain.Values;
@@ -14,23 +15,13 @@ public class FellowshipOfTheRingService
             .ChangeWeapon(new Weapon(newWeapon, damage));
 
     public void MoveMembersToRegion(List<Name> memberNames, Region region)
-    {
-        foreach (var name in memberNames) {
-            var character = Fellowship.GetMember(name);
-            if (character == null) {
-                continue;
-            }
-
-            character.ChangeRegion(region);
-
-            // let's see if that can be moved to domain events
-            if (region != Region.Mordor) {
-                Console.WriteLine($"{character.GetName()} moved to {region}.");
-            } else {
-                Console.WriteLine($"{character.GetName()} moved to {region} 💀.");
-            }
-        }
-    }
+        => Fellowship
+            .GetAllMembers()
+            .Where(character => NameSpecification
+                .ForNames(memberNames)
+                .IsSatisfiedBy(character))
+            .Iter(character => character
+                .ChangeRegion(region));
 
     public void PrintMembersInRegion(Region region)
     {
@@ -53,13 +44,13 @@ public class FellowshipOfTheRingService
     }
 
     public override string ToString()
-    {
-        string result = "Fellowship of the Ring Members:\n";
-
-        foreach (var member in Fellowship.GetAllMembers()) {
-            result += $"{member.GetName()} ({member.GetRace()}) with {member.GetWeaponName()} in {member.GetRegion()}" + "\n";
-        }
-
-        return result;
-    }
+        => new StringBuilder()
+            .AppendLine("Fellowship of the Ring Members:")
+            .Append(string.Concat(
+                Fellowship
+                    .GetAllMembers()
+                    .Select(member
+                        => $"{member.GetName()} ({member.GetRace()}) with {member.GetWeaponName()} in {member.GetRegion()}\n")
+                    .ToList()))
+            .ToString();
 }

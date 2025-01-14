@@ -38,5 +38,12 @@ public sealed class Character
             throw new InvalidOperationException($"Cannot move {GetName()} from Mordor to {region}. Reason: There is no coming back from Mordor.");
         }
         _region = region;
+
+        // let's see if that can be moved to domain events
+        if (region != Region.Mordor) {
+            Console.WriteLine($"{_name} moved to {region}.");
+        } else {
+            Console.WriteLine($"{_name} moved to {region} 💀.");
+        }
     }
 }
