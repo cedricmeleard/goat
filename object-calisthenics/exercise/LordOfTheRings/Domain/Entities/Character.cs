@@ -1,3 +1,4 @@
+using System;
 using LordOfTheRings.Domain.Values;
 
 namespace LordOfTheRings.Domain.Entities;
@@ -40,10 +41,6 @@ public sealed class Character
         _region = region;
 
         // let's see if that can be moved to domain events
-        if (region != Region.Mordor) {
-            Console.WriteLine($"{_name} moved to {region}.");
-        } else {
-            Console.WriteLine($"{_name} moved to {region} 💀.");
-        }
+        Console.WriteLine(region != Region.Mordor ? $"{_name} moved to {region}." : $"{_name} moved to {region} 💀.");
     }
 }

@@ -1,3 +1,5 @@
+using System;
+
 namespace LordOfTheRings.Domain.Values;
 
 public class Name : IEquatable<Name>

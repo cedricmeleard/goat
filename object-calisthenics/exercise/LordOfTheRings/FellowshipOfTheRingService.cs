@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using LanguageExt;
 using LordOfTheRings.Domain.Entities;
 using LordOfTheRings.Domain.Specifications;
 using LordOfTheRings.Domain.Values;
@@ -20,6 +24,7 @@ public class FellowshipOfTheRingService
             .Where(character => NameSpecification
                 .ForNames(memberNames)
                 .IsSatisfiedBy(character))
+            .AsIterable()
             .Iter(character => character
                 .ChangeRegion(region));
 

@@ -1,3 +1,5 @@
+using System;
+
 namespace LordOfTheRings.Domain.Values;
 
 public sealed class WeaponName : IEquatable<WeaponName>

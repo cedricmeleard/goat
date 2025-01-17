@@ -1,8 +1,13 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using FluentAssertions;
 using LordOfTheRings.App;
 using LordOfTheRings.Domain.Entities;
 using LordOfTheRings.Domain.Values;
+using VerifyXunit;
 
 namespace LordOfTheRings.Tests;
 
@@ -20,7 +25,7 @@ public class GoldenMasterTests
 
         // Assert: Utiliser Verify pour vérifier la sortie
         string output = stringWriter.ToString();
-        await Verify(output);
+        await Verifier.Verify(output);
     }
 
     public class Failure

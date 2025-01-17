@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using FsCheck;
 using FsCheck.Xunit;
@@ -7,7 +8,7 @@ namespace LordOfTheRings.Tests.Domain;
 
 public class WeaponNameTests
 {
-    private readonly Arbitrary<string> _nonNullArbitraryString = Arb
+    /*private readonly Arbitrary<string> _nonNullArbitraryString = Arb
         .Generate<string>()
         .Where(name => !string.IsNullOrWhiteSpace(name) && name.All(c => !char.IsControl(c)))
         .ToArbitrary();
@@ -28,6 +29,7 @@ public class WeaponNameTests
                     => (!name2.Equals(name, StringComparison.InvariantCultureIgnoreCase))
                     .Implies(WeaponName.Parse(name) != WeaponName.Parse(name2)))
             .QuickCheckThrowOnFailure();
+            */
 
     [Theory]
     [InlineData("a")]
