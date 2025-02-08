@@ -2,7 +2,7 @@ using System;
 
 namespace LordOfTheRings.Domain.Values;
 
-public class Name : IEquatable<Name>
+public sealed class Name : IEquatable<Name>
 {
     private readonly string _name;
     private Name(string name)

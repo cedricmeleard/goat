@@ -6,7 +6,6 @@ using LanguageExt;
 using LordOfTheRings.Domain.Ports;
 using LordOfTheRings.Domain.Specifications;
 using LordOfTheRings.Domain.Values;
-using LordOfTheRings.Infrastructure.Adapters;
 
 namespace LordOfTheRings.Domain.Entities;
 
@@ -23,7 +22,7 @@ public sealed class Fellowship
         _presenter = presenter;
     }
 
-    public static Fellowship CreateInstance(FellowshipFellowshipPresenter presenter) => new(presenter);
+    public static Fellowship CreateInstance(IFellowshipPresenter presenter) => new(presenter);
 
     public void AddMember(Character character)
     {

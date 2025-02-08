@@ -11,7 +11,7 @@ public class RegionSpecification : ISpecification<Character>
         _region = region;
     }
 
-    public static RegionSpecification ForRegion(Region region) => new(region);
-
     public bool IsSatisfiedBy(Character character) => character.IsFromRegion(_region);
+
+    public static RegionSpecification ForRegion(Region region) => new(region);
 }

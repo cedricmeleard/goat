@@ -10,7 +10,7 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        var fellowship = Fellowship.CreateInstance(new FellowshipFellowshipPresenter());
+        var fellowship = Fellowship.CreateInstance(new FellowshipPresenter());
 
         try {
             fellowship.AddMember(Character.Create(

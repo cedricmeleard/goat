@@ -36,7 +36,7 @@ public class GoldenMasterTests
         public void Should_Fail_When_Add_Incomplete_Member(CharacterBuilder character, Type expectedExceptionType,
             string expectedMessage)
         {
-            var sut = Fellowship.CreateInstance(new FellowshipFellowshipPresenter());
+            var sut = Fellowship.CreateInstance(new FellowshipPresenter());
             // Act
             var action = () => sut.AddMember(character.Build());
             // Assert: Utiliser Verify pour vérifier la sortie
@@ -50,7 +50,7 @@ public class GoldenMasterTests
         [Fact]
         public void Should_Fail_When_Character_Added_Twice()
         {
-            var sut = Fellowship.CreateInstance(new FellowshipFellowshipPresenter());
+            var sut = Fellowship.CreateInstance(new FellowshipPresenter());
             sut.AddMember(new CharacterBuilder("Gimli", Race.Dwarf, new WeaponBuilder("Axe", 15)).Build());
             // Act
             var action = () =>
@@ -66,7 +66,7 @@ public class GoldenMasterTests
         [Fact]
         public void Should_Fail_When_Character_Added_Is_Null()
         {
-            var sut = Fellowship.CreateInstance(new FellowshipFellowshipPresenter());
+            var sut = Fellowship.CreateInstance(new FellowshipPresenter());
             // Act
             var action = () => sut.AddMember(null);
             // Assert: Utiliser Verify pour vérifier la sortie
