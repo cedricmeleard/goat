@@ -14,58 +14,58 @@ public static class Program
 
     public static void Run()
     {
-        var fellowship = new FellowshipOfTheRingService();
+        var fellowship = new Fellowship();
 
         try {
-            fellowship.Fellowship.AddMember(Character.Create(
+            fellowship.AddMember(Character.Create(
                 Name.Parse("Frodo"),
                 Race.Hobbit,
                 new Weapon(WeaponName.Parse("Sting"), Damage.Parse(30))
             ));
 
-            fellowship.Fellowship.AddMember(Character.Create(
+            fellowship.AddMember(Character.Create(
                 Name.Parse("Sam"),
                 Race.Hobbit,
                 new Weapon(WeaponName.Parse("Dagger"), Damage.Parse(10))
             ));
 
 
-            fellowship.Fellowship.AddMember(Character.Create(
+            fellowship.AddMember(Character.Create(
                 Name.Parse("Merry"),
                 Race.Hobbit,
                 new Weapon(WeaponName.Parse("Short Sword"), Damage.Parse(24))
             ));
 
-            fellowship.Fellowship.AddMember(Character.Create(
+            fellowship.AddMember(Character.Create(
                 Name.Parse("Pippin"),
                 Race.Hobbit,
                 new Weapon(WeaponName.Parse("Bow"), Damage.Parse(8))
             ));
 
-            fellowship.Fellowship.AddMember(Character.Create(
+            fellowship.AddMember(Character.Create(
                 Name.Parse("Aragorn"),
                 Race.Human,
                 new Weapon(WeaponName.Parse("Sword"), Damage.Parse(90))
             ));
-            fellowship.Fellowship.AddMember(Character.Create(
+            fellowship.AddMember(Character.Create(
                 Name.Parse("Boromir"),
                 Race.Human,
                 new Weapon(WeaponName.Parse("Sword"), Damage.Parse(90))
             ));
 
-            fellowship.Fellowship.AddMember(Character.Create(
+            fellowship.AddMember(Character.Create(
                 Name.Parse("Legolas"),
                 Race.Elf,
                 new Weapon(WeaponName.Parse("Bow"), Damage.Parse(100))
             ));
 
-            fellowship.Fellowship.AddMember(Character.Create(
+            fellowship.AddMember(Character.Create(
                 Name.Parse("Gimli"),
                 Race.Dwarf,
                 new Weapon(WeaponName.Parse("Axe"), Damage.Parse(100))
             ));
 
-            fellowship.Fellowship.AddMember(Character.Create(
+            fellowship.AddMember(Character.Create(
                 Name.Parse("Gandalf the 🐐"),
                 Race.Wizard,
                 new Weapon(WeaponName.Parse("Staff"), Damage.Parse(200))
@@ -99,10 +99,10 @@ public static class Program
         fellowship.MoveMembersToRegion(group1, Region.Rivendell);
         fellowship.UpdateCharacterWeapon(Name.Parse("Frodo"), WeaponName.Parse("Dard"), Damage.Parse(25));
 
-        fellowship.Fellowship.RemoveMember(Name.Parse("Boromir"));
+        fellowship.RemoveMember(Name.Parse("Boromir"));
 
         try {
-            fellowship.Fellowship.RemoveMember(Name.Parse("Saroumane")); //this should fail for "Saroumane"    
+            fellowship.RemoveMember(Name.Parse("Saroumane")); //this should fail for "Saroumane"    
         }
         catch (Exception ex) {
             Console.WriteLine(ex.Message);
@@ -141,8 +141,8 @@ public static class Program
         fellowship.PrintMembersInRegion(Region.Shire);
 
         try {
-            fellowship.Fellowship.RemoveMember(Name.Parse("Frodo"));
-            fellowship.Fellowship.RemoveMember(Name.Parse("Sam")); // This should throw an exception
+            fellowship.RemoveMember(Name.Parse("Frodo"));
+            fellowship.RemoveMember(Name.Parse("Sam")); // This should throw an exception
         }
         catch (Exception ex) {
             Console.WriteLine(ex.Message);

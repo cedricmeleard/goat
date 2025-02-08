@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using LanguageExt;
 using LordOfTheRings.Domain.Entities;
+using LordOfTheRings.Domain.Specifications;
 using LordOfTheRings.Domain.Values;
 
 namespace LordOfTheRings;
@@ -33,9 +37,48 @@ public sealed class Fellowship
 
         _members.Remove(characterToRemove);
     }
-    public Character? GetMember(Name name) => FindMemberByName(name);
-    public IReadOnlyCollection<Character> GetAllMembers() => new ReadOnlyCollection<Character>(_members);
 
+    public IReadOnlyCollection<Character> GetAllMembers() => new ReadOnlyCollection<Character>(_members);
     private Character? FindMemberByName(Name name) => _members.Find(character => character.GetName() == name);
     private bool IsInFellowship(Character character) => _members.Exists(m => m.GetName() == character.GetName());
+    public void UpdateCharacterWeapon(Name name, WeaponName newWeapon, Damage damage)
+        => FindMemberByName(name)?
+            .ChangeWeapon(new Weapon(newWeapon, damage));
+    public void MoveMembersToRegion(List<Name> memberNames, Region region)
+        => _members
+            .Where(character => NameSpecification
+                .ForNames(memberNames)
+                .IsSatisfiedBy(character))
+            .AsIterable()
+            .Iter(character => character
+                .ChangeRegion(region));
+
+    public void PrintMembersInRegion(Region region)
+    {
+        var charactersInRegion = _members
+            .Where(character => RegionSpecification
+                .ForRegion(region)
+                .IsSatisfiedBy(character))
+            .ToList();
+
+        if (charactersInRegion.Count == 0) {
+            Console.WriteLine($"No members in {region}");
+            return;
+        }
+
+        Console.WriteLine($"Members in {region}:");
+        foreach (var character in charactersInRegion) {
+            Console.WriteLine($"{character.GetName()} ({character.GetRace()}) with {character.GetWeaponName()}");
+        }
+    }
+
+    public override string ToString()
+        => new StringBuilder()
+            .AppendLine("Fellowship of the Ring Members:")
+            .Append(string.Concat(
+                _members
+                    .Select(member
+                        => $"{member.GetName()} ({member.GetRace()}) with {member.GetWeaponName()} in {member.GetRegion()}\n")
+                    .ToList()))
+            .ToString();
 }
