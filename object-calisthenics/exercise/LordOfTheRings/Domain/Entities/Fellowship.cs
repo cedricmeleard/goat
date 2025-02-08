@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using LanguageExt;
-using LordOfTheRings.Domain.Entities;
+using LordOfTheRings.Domain.Ports;
 using LordOfTheRings.Domain.Specifications;
 using LordOfTheRings.Domain.Values;
+using LordOfTheRings.Infrastructure.Adapters;
 
-namespace LordOfTheRings;
+namespace LordOfTheRings.Domain.Entities;
 
 public sealed class Fellowship
 {
@@ -15,6 +16,14 @@ public sealed class Fellowship
     private const string CharacterAlreadyExistsMessage = "A character with the same name already exists in the fellowship.";
     private const string CharacterDoesNotExistMessage = "No character with the name '{0}' exists in the fellowship.";
     private readonly List<Character> _members = [];
+    private readonly IFellowshipPresenter _presenter;
+
+    private Fellowship(IFellowshipPresenter presenter)
+    {
+        _presenter = presenter;
+    }
+
+    public static Fellowship CreateInstance(FellowshipFellowshipPresenter presenter) => new(presenter);
 
     public void AddMember(Character character)
     {
@@ -72,13 +81,6 @@ public sealed class Fellowship
         }
     }
 
-    public override string ToString()
-        => new StringBuilder()
-            .AppendLine("Fellowship of the Ring Members:")
-            .Append(string.Concat(
-                _members
-                    .Select(member
-                        => $"{member.GetName()} ({member.GetRace()}) with {member.GetWeaponName()} in {member.GetRegion()}\n")
-                    .ToList()))
-            .ToString();
+    public override string ToString() => _presenter?
+        .FormatFellowshipComposition(new ReadOnlyCollection<Character>(_members));
 }

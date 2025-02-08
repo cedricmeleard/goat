@@ -7,6 +7,7 @@ using FluentAssertions;
 using LordOfTheRings.App;
 using LordOfTheRings.Domain.Entities;
 using LordOfTheRings.Domain.Values;
+using LordOfTheRings.Infrastructure.Adapters;
 using VerifyXunit;
 
 namespace LordOfTheRings.Tests;
@@ -35,7 +36,7 @@ public class GoldenMasterTests
         public void Should_Fail_When_Add_Incomplete_Member(CharacterBuilder character, Type expectedExceptionType,
             string expectedMessage)
         {
-            var sut = new Fellowship();
+            var sut = Fellowship.CreateInstance(new FellowshipFellowshipPresenter());
             // Act
             var action = () => sut.AddMember(character.Build());
             // Assert: Utiliser Verify pour vérifier la sortie
@@ -49,7 +50,7 @@ public class GoldenMasterTests
         [Fact]
         public void Should_Fail_When_Character_Added_Twice()
         {
-            var sut = new Fellowship();
+            var sut = Fellowship.CreateInstance(new FellowshipFellowshipPresenter());
             sut.AddMember(new CharacterBuilder("Gimli", Race.Dwarf, new WeaponBuilder("Axe", 15)).Build());
             // Act
             var action = () =>
@@ -65,7 +66,7 @@ public class GoldenMasterTests
         [Fact]
         public void Should_Fail_When_Character_Added_Is_Null()
         {
-            var sut = new Fellowship();
+            var sut = Fellowship.CreateInstance(new FellowshipFellowshipPresenter());
             // Act
             var action = () => sut.AddMember(null);
             // Assert: Utiliser Verify pour vérifier la sortie

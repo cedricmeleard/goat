@@ -11,6 +11,7 @@ public sealed class WeaponName : IEquatable<WeaponName>
     }
 
     public bool Equals(WeaponName? other) => other is not null && string.Equals(_name, other._name, StringComparison.InvariantCultureIgnoreCase);
+    public override bool Equals(object? obj) => Equals((WeaponName?)obj);
 
     public static WeaponName Parse(string name)
     {
@@ -21,10 +22,7 @@ public sealed class WeaponName : IEquatable<WeaponName>
     }
 
     public override string ToString() => _name;
-
     public static bool operator ==(WeaponName? left, WeaponName? right) => Equals(left, right);
     public static bool operator !=(WeaponName? left, WeaponName? right) => !Equals(left, right);
-
-    public override bool Equals(object? obj) => Equals((WeaponName?)obj);
     public override int GetHashCode() => _name?.GetHashCode() ?? 0;
 }

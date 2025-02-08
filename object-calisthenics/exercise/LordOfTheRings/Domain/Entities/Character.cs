@@ -31,7 +31,6 @@ public sealed class Character
     }
 
     public bool IsFromRegion(Region region) => _region == region;
-
     public void ChangeWeapon(Weapon newWeapon) => _weapon = newWeapon;
     public void ChangeRegion(Region region)
     {
