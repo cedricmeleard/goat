@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using LanguageExt;
@@ -16,6 +15,7 @@ public sealed class Fellowship
     private const string CharacterAlreadyExistsMessage = "A character with the same name already exists in the fellowship.";
     private const string CharacterDoesNotExistMessage = "No character with the name '{0}' exists in the fellowship.";
     private readonly List<Character> _members = [];
+
     public void AddMember(Character character)
     {
         if (character == null) {
@@ -28,6 +28,7 @@ public sealed class Fellowship
 
         _members.Add(character);
     }
+
     public void RemoveMember(Name characterName)
     {
         var characterToRemove = FindMemberByName(characterName);
@@ -38,7 +39,6 @@ public sealed class Fellowship
         _members.Remove(characterToRemove);
     }
 
-    public IReadOnlyCollection<Character> GetAllMembers() => new ReadOnlyCollection<Character>(_members);
     private Character? FindMemberByName(Name name) => _members.Find(character => character.GetName() == name);
     private bool IsInFellowship(Character character) => _members.Exists(m => m.GetName() == character.GetName());
     public void UpdateCharacterWeapon(Name name, WeaponName newWeapon, Damage damage)

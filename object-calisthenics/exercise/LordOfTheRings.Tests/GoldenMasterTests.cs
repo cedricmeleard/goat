@@ -22,7 +22,7 @@ public class GoldenMasterTests
         Console.SetOut(stringWriter);
 
         // Act
-        Program.Run();
+        Program.Main([]);
 
         // Assert
         await Verifier.Verify(stringWriter.ToString());

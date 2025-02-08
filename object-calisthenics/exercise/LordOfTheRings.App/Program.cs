@@ -9,11 +9,6 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        Run();
-    }
-
-    public static void Run()
-    {
         var fellowship = new Fellowship();
 
         try {
