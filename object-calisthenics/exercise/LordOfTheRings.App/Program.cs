@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using LordOfTheRings.Domain;
 using LordOfTheRings.Domain.Entities;
 using LordOfTheRings.Domain.Values;
 using LordOfTheRings.Infrastructure.Adapters;
+using LordOfTheRings.Infrastructure.Repositories;
 
 namespace LordOfTheRings.App;
 
@@ -10,7 +12,7 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        var fellowship = Fellowship.CreateInstance(new FellowshipPresenter());
+        var fellowship = new Fellowship(new FellowshipPresenter(), new MemberRepository());
 
         try {
             fellowship.AddMember(Character.Create(

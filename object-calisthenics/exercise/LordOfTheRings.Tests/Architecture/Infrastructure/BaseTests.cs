@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using LordOfTheRings.App;
-using LordOfTheRings.Domain.Entities;
+using LordOfTheRings.Domain;
 using LordOfTheRings.Infrastructure.Adapters;
 
 namespace LordOfTheRings.Tests.Architecture.Infrastructure;

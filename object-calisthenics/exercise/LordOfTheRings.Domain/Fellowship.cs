@@ -3,30 +3,22 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using LanguageExt;
+using LordOfTheRings.Domain.Entities;
 using LordOfTheRings.Domain.Ports;
 using LordOfTheRings.Domain.Specifications;
 using LordOfTheRings.Domain.Values;
 
-namespace LordOfTheRings.Domain.Entities;
+namespace LordOfTheRings.Domain;
 
-public sealed class Fellowship
+public sealed class Fellowship(IFellowshipPresenter presenter, IMemberRepository memberRepository)
 {
     private const string CharacterCannotBeNullMessage = "Character cannot be null.";
     private const string CharacterAlreadyExistsMessage = "A character with the same name already exists in the fellowship.";
     private const string CharacterDoesNotExistMessage = "No character with the name '{0}' exists in the fellowship.";
-    private readonly List<Character> _members = [];
-    private readonly IFellowshipPresenter _presenter;
-
-    private Fellowship(IFellowshipPresenter presenter)
-    {
-        _presenter = presenter;
-    }
-
-    public static Fellowship CreateInstance(IFellowshipPresenter presenter) => new(presenter);
 
     public void AddMember(Character character)
     {
-        if (character == null) {
+        if (character is null) {
             throw new ArgumentNullException(nameof(character), CharacterCannotBeNullMessage);
         }
 
@@ -34,7 +26,7 @@ public sealed class Fellowship
             throw new InvalidOperationException(CharacterAlreadyExistsMessage);
         }
 
-        _members.Add(character);
+        memberRepository.AddMember(character);
     }
 
     public void RemoveMember(Name characterName)
@@ -44,29 +36,25 @@ public sealed class Fellowship
             throw new InvalidOperationException(string.Format(CharacterDoesNotExistMessage, characterName));
         }
 
-        _members.Remove(characterToRemove);
+        memberRepository.RemoveMember(characterToRemove);
     }
 
-    private Character? FindMemberByName(Name name) => _members.Find(character => character.GetName() == name);
-    private bool IsInFellowship(Character character) => _members.Exists(m => m.GetName() == character.GetName());
+    private Character? FindMemberByName(Name name) => memberRepository.GetMember(NameSpecification.ForName(name));
+    private bool IsInFellowship(Character character) => memberRepository.GetMember(NameSpecification.ForName(character.GetName())) != null;
+
     public void UpdateCharacterWeapon(Name name, WeaponName newWeapon, Damage damage)
         => FindMemberByName(name)?
             .ChangeWeapon(new Weapon(newWeapon, damage));
+
     public void MoveMembersToRegion(List<Name> memberNames, Region region)
-        => _members
-            .Where(character => NameSpecification
-                .ForNames(memberNames)
-                .IsSatisfiedBy(character))
+        => memberRepository.GetMembers(NamesSpecification.ForNames(memberNames))
             .AsIterable()
             .Iter(character => character
                 .ChangeRegion(region));
 
     public void PrintMembersInRegion(Region region)
     {
-        var charactersInRegion = _members
-            .Where(character => RegionSpecification
-                .ForRegion(region)
-                .IsSatisfiedBy(character))
+        var charactersInRegion = memberRepository.GetMembers(RegionSpecification.ForRegion(region))
             .ToList();
 
         if (charactersInRegion.Count == 0) {
@@ -80,6 +68,6 @@ public sealed class Fellowship
         }
     }
 
-    public override string ToString() => _presenter?
-        .FormatFellowshipComposition(new ReadOnlyCollection<Character>(_members));
+    public override string ToString() => presenter?
+        .FormatFellowshipComposition(new ReadOnlyCollection<Character>(memberRepository.GetMembers().ToList()));
 }
