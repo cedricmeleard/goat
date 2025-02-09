@@ -1,4 +1,5 @@
-﻿using LordOfTheRings.Domain.Entities;
+﻿using LanguageExt;
+using LordOfTheRings.Domain.Entities;
 using LordOfTheRings.Domain.Ports;
 using LordOfTheRings.Domain.Specifications;
 
@@ -8,13 +9,10 @@ public sealed class MemberRepository : IMemberRepository
 {
     private readonly List<Character> _members = [];
 
-    public IEnumerable<Character> GetMembers(ISpecification<Character>? specification = null)
-        => specification != null
-            ? _members.Where(specification.IsSatisfiedBy)
-            : new List<Character>(_members);
+    public Either<CharacterNotFound, Character> GetMember(ISpecification<Character> specification)
+        => _members.FirstOrDefault(specification.IsSatisfiedBy)
+           ?? Either<CharacterNotFound, Character>.Left(new CharacterNotFound());
 
-    public Character? GetMember(ISpecification<Character> specification)
-        => _members.FirstOrDefault(specification.IsSatisfiedBy);
     public void AddMember(Character character)
     {
         ArgumentNullException.ThrowIfNull(character);
@@ -23,5 +21,17 @@ public sealed class MemberRepository : IMemberRepository
         }
         _members.Add(character);
     }
+
     public void RemoveMember(Character character) => _members.Remove(character);
+
+    public Either<NoMemberFound, IEnumerable<Character>> GetMembers(ISpecification<Character>? specification = null)
+    {
+        var members = specification != null
+            ? _members.Where(specification.IsSatisfiedBy)
+            : new List<Character>(_members);
+
+        return members.Any()
+            ? Either<NoMemberFound, IEnumerable<Character>>.Right(members)
+            : Either<NoMemberFound, IEnumerable<Character>>.Left(new NoMemberFound());
+    }
 }

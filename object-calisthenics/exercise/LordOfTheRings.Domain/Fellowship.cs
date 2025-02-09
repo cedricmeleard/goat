@@ -30,44 +30,47 @@ public sealed class Fellowship(IFellowshipPresenter presenter, IMemberRepository
     }
 
     public void RemoveMember(Name characterName)
-    {
-        var characterToRemove = FindMemberByName(characterName);
-        if (characterToRemove is null) {
-            throw new InvalidOperationException(string.Format(CharacterDoesNotExistMessage, characterName));
-        }
+        => FindMemberByName(characterName)
+            .Match(
+                _ => throw new InvalidOperationException(string.Format(CharacterDoesNotExistMessage, characterName)),
+                memberRepository.RemoveMember);
 
-        memberRepository.RemoveMember(characterToRemove);
-    }
+    private Either<CharacterNotFound, Character> FindMemberByName(Name name)
+        => memberRepository.GetMember(NameSpecification.ForName(name));
 
-    private Character? FindMemberByName(Name name) => memberRepository.GetMember(NameSpecification.ForName(name));
-    private bool IsInFellowship(Character character) => memberRepository.GetMember(NameSpecification.ForName(character.GetName())) != null;
+    private bool IsInFellowship(Character character) => memberRepository
+        .GetMember(NameSpecification.ForName(character.GetName()))
+        .IsRight;
 
     public void UpdateCharacterWeapon(Name name, WeaponName newWeapon, Damage damage)
-        => FindMemberByName(name)?
-            .ChangeWeapon(new Weapon(newWeapon, damage));
+        => FindMemberByName(name)
+            .Match(
+                _ => throw new InvalidOperationException(string.Format(CharacterDoesNotExistMessage, name)),
+                character => character.ChangeWeapon(new Weapon(newWeapon, damage)));
 
     public void MoveMembersToRegion(List<Name> memberNames, Region region)
-        => memberRepository.GetMembers(NamesSpecification.ForNames(memberNames))
-            .AsIterable()
-            .Iter(character => character
-                .ChangeRegion(region));
+        => memberRepository
+            .GetMembers(NamesSpecification.ForNames(memberNames))
+            .Match(
+                _ => { },
+                characters => characters.AsIterable().Iter(character => character.ChangeRegion(region)));
 
     public void PrintMembersInRegion(Region region)
     {
-        var charactersInRegion = memberRepository.GetMembers(RegionSpecification.ForRegion(region))
-            .ToList();
-
-        if (charactersInRegion.Count == 0) {
-            Console.WriteLine($"No members in {region}");
-            return;
-        }
-
-        Console.WriteLine($"Members in {region}:");
-        foreach (var character in charactersInRegion) {
-            Console.WriteLine($"{character.GetName()} ({character.GetRace()}) with {character.GetWeaponName()}");
-        }
+        memberRepository
+            .GetMembers(RegionSpecification.ForRegion(region))
+            .Match(
+                error => Console.WriteLine($"No members in {region}"),
+                charactersInRegion => Console.WriteLine(presenter?.FormatMemberInRegion(charactersInRegion, region) ?? string.Empty));
     }
 
-    public override string ToString() => presenter?
-        .FormatFellowshipComposition(new ReadOnlyCollection<Character>(memberRepository.GetMembers().ToList()));
+    public override string ToString()
+    {
+        return memberRepository
+            .GetMembers()
+            .Match(
+                _ => string.Empty,
+                characters => presenter?.FormatFellowshipComposition(new ReadOnlyCollection<Character>(characters.ToList())) ?? string.Empty
+            );
+    }
 }

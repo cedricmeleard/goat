@@ -2,6 +2,7 @@
 using System.Text;
 using LordOfTheRings.Domain.Entities;
 using LordOfTheRings.Domain.Ports;
+using LordOfTheRings.Domain.Values;
 
 namespace LordOfTheRings.Infrastructure.Adapters;
 
@@ -15,6 +16,14 @@ public class FellowshipPresenter : IFellowshipPresenter
                     .Select(member => member.DisplayMember())
                     .ToList()))
             .ToString();
+    public string FormatMemberInRegion(IEnumerable<Character> charactersInRegion, Region region)
+    {
+        var sb = new StringBuilder($"Members in {region}:");
+        foreach (var character in charactersInRegion) {
+            sb.AppendLine().Append($"{character.GetName()} ({character.GetRace()}) with {character.GetWeaponName()}");
+        }
+        return sb.ToString();
+    }
 }
 
 public static class CharacterFellowshipExtension
