@@ -20,7 +20,7 @@ public static class Program
                 Race.Hobbit,
                 new Weapon(WeaponName.Parse("Sting"), Damage.Parse(30))
             ));
-
+ 
             fellowship.AddMember(Character.Create(
                 Name.Parse("Sam"),
                 Race.Hobbit,

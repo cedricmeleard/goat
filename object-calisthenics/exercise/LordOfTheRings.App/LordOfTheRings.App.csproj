@@ -1,5 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+    <PropertyGroup>
+      <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
     <ItemGroup>
         <ProjectReference Include="..\LordOfTheRings.Domain\LordOfTheRings.Domain.csproj"/>
         <ProjectReference Include="..\LordOfTheRings.Infrastructure\LordOfTheRings.Infrastructure.csproj"/>

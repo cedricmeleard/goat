@@ -53,7 +53,9 @@ public sealed class Fellowship(IFellowshipPresenter presenter, IMemberRepository
             .GetMembers(NamesSpecification.ForNames(memberNames))
             .Match(
                 _ => { },
-                characters => characters.AsIterable().Iter(character => character.ChangeRegion(region)));
+                characters => characters
+                    .AsIterable()
+                    .Iter(character => character.ChangeRegion(region)));
 
     public void PrintMembersInRegion(Region region)
     {

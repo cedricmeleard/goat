@@ -1,9 +1,11 @@
 using System;
+using LordOfTheRings.Domain.Abstract;
+using LordOfTheRings.Domain.DomainEvents.Regions;
 using LordOfTheRings.Domain.Values;
 
 namespace LordOfTheRings.Domain.Entities;
 
-public sealed class Character
+public sealed class Character : BaseEntity
 {
     private readonly Name _name;
     private readonly Race _race;
@@ -38,8 +40,6 @@ public sealed class Character
             throw new InvalidOperationException($"Cannot move {GetName()} from Mordor to {region}. Reason: There is no coming back from Mordor.");
         }
         _region = region;
-
-        // let's see if that can be moved to domain events
-        Console.WriteLine(region != Region.Mordor ? $"{_name} moved to {region}." : $"{_name} moved to {region} 💀.");
+        RaiseEvent(new CharacterMovedToRegionDomainEvent(_name, region));
     }
 }
